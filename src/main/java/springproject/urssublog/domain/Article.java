@@ -1,6 +1,8 @@
 package springproject.urssublog.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Cleanup;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,18 +20,28 @@ public class Article {
     @Column(name = "article_id")
     private Long id;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdTime;
     @Column(name = "updated_at")
     private LocalDateTime updatedTime;
 
+    @Column(nullable = false, length = 255)
+    @NotBlank(message = "content가 비어있을 수 없습니다.")
     private String content;
+
+    @Column(nullable = false, length = 255)
+    @NotBlank(message = "title이 비어있을 수 없습니다.")
     private String title;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    public Article(String content, String title) {
+        this.content = content;
+        this.title = title;
+    }
 }
