@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import springproject.urssublog.domain.Article;
 import springproject.urssublog.domain.Comment;
 import springproject.urssublog.domain.User;
 
@@ -39,4 +40,38 @@ public class CommentRepositoryTest {
         assertThat(commentRepository.findById(comment.getId()).isPresent()).isTrue();
     }
 
+    /**
+     * Comment 엔티티 db 수정 테스트 : 성공한 경우.
+     */
+    @Test
+    public void updateCommentSuccess() {
+        //given
+        Comment comment = new Comment("content!~~");
+        comment.setCreatedTime(LocalDateTime.now());
+        commentRepository.save(comment);
+
+        //when
+        comment.setContent("new content");
+
+        //then
+        Comment newComment = commentRepository.findById(comment.getId()).get();
+        assertThat(newComment.getContent()).isEqualTo("new content");
+    }
+
+    /**
+     * Comment 엔티티 db 삭제 테스트 : 성공한 경우.
+     */
+    @Test
+    public void deleteCommentSuccess() {
+        //given
+        Comment comment = new Comment("hello");
+        comment.setCreatedTime(LocalDateTime.now());
+        commentRepository.save(comment);
+
+        //when
+        commentRepository.deleteById(comment.getId());
+
+        //then
+        assertThat(commentRepository.findById(comment.getId()).isPresent()).isFalse();
+    }
 }

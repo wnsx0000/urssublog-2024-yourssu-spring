@@ -2,6 +2,7 @@ package springproject.urssublog.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +26,7 @@ public class Comment {
 
     @Column(nullable = false, length = 255)
     @NotBlank(message = "content가 비어있을 수 없습니다.")
+    @Size(max = 255, message = "문자열 최대 길이는 255자 입니다.")
     private String content;
 
     @ManyToOne
