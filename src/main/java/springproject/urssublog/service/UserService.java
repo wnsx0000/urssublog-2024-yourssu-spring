@@ -2,6 +2,7 @@ package springproject.urssublog.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import springproject.urssublog.domain.User;
 import springproject.urssublog.exception.classes.BlogResourceNotFoundException;
 import springproject.urssublog.exception.classes.BlogUserNotFoundException;
@@ -19,10 +20,10 @@ public class UserService {
     private final JpaUserRepository userRepository;
 
     /**
-     * User 객체를 파라미터로 받아 회원가입을 수행한다.
-     * 이때 비밀번호 암호화, 생성 시간 지정을 수행한다.
+     * User 객체를 파라미터로 받아 회원가입을 수행한다. 추가로, 비밀번호 암호화, 생성 시간 지정을 수행한다.
      * @author Jun Lee
      */
+    @Transactional
     public void saveUser(User user) {
         user.setPassword(encryptStringWithSha256(user.getPassword()));
         user.setCreatedTime(LocalDateTime.now());
@@ -33,6 +34,7 @@ public class UserService {
      * user id를 파라미터로 받아 회원 탈퇴(삭제)를 수행한다.
      * @author Jun Lee
      */
+    @Transactional
     public void deleteUser(Long userId) {
         if(userRepository.findById(userId).isEmpty()) {
             throw new BlogResourceNotFoundException("해당 id를 가진 사용자가 없습니다.");
@@ -68,14 +70,9 @@ public class UserService {
         }
     }
 
-    // 디버깅용 User 객체의 username 조회 메서드
+    // 디버깅용. User 객체의 username 조회 메서드
     public String getUsernameById(Long id) {
         User user = userRepository.findById(id).orElse(null);
-        if(user == null) {
-            return null;
-        }
-        else {
-            return user.getUsername();
-        }
+        return (user != null ? user.getUsername() : null);
     }
 }

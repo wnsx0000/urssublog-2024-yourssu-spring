@@ -70,7 +70,7 @@ public class UnitedExceptionHandlingClass {
     }
 
     /**
-     * 로그인 시에 해당 계정이 존재하지 않는 경우에 발생하는 BlogUserNotFoundException 처리.
+     * 로그인 등의 상황에서 해당 사용자가 존재하지 않는 경우에 발생하는 BlogUserNotFoundException 처리.
      * @author Jun Lee
      */
     @ExceptionHandler(BlogUserNotFoundException.class)
