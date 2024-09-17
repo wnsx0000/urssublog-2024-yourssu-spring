@@ -1,6 +1,4 @@
-package springproject.urssublog.exception;
-
-import org.apache.logging.log4j.message.Message;
+package springproject.urssublog.exception.classes;
 
 public class BlogUserNotFoundException extends BlogException {
     public BlogUserNotFoundException(String message) {

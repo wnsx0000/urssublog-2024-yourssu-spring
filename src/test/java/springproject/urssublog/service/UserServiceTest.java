@@ -5,12 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import springproject.urssublog.domain.User;
-import springproject.urssublog.exception.BlogResourceNotFoundException;
-import springproject.urssublog.exception.BlogUserNotFoundException;
+import springproject.urssublog.exception.classes.BlogResourceNotFoundException;
+import springproject.urssublog.exception.classes.BlogUserNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,7 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(SpringExtension.class)
 @Transactional
 public class UserServiceTest {
-    @Autowired UserService userService;
+    @Autowired
+    UserService userService;
 
     /**
      * 비밀번호 암호화 테스트 : 성공한 경우.

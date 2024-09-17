@@ -3,20 +3,18 @@ package springproject.urssublog.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springproject.urssublog.domain.User;
 import springproject.urssublog.dto.user.UserLoginRequestDto;
 import springproject.urssublog.dto.user.UserResponseDto;
 import springproject.urssublog.dto.user.UserSignupRequestDto;
-import springproject.urssublog.exception.BlogNotAuthorizedException;
-import springproject.urssublog.exception.BlogUserNotFoundException;
+import springproject.urssublog.exception.classes.BlogNotAuthorizedException;
 import springproject.urssublog.service.UserService;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -61,7 +59,7 @@ public class UserController {
      * 로그아웃
      * @author Jun Lee
      */
-    @GetMapping("/logout")
+    @GetMapping("/users/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void logout(
             HttpServletRequest request
@@ -80,6 +78,8 @@ public class UserController {
             @PathVariable("userId") String userId,
             HttpServletRequest request
     ) {
+        log.debug("UserController, deleteUser() mapped to /users/{userId} called.");
+
         HttpSession session = request.getSession(false);
         if(!session.getAttribute("id").equals(Long.parseLong(userId))) {
             throw new BlogNotAuthorizedException("다른 사용자의 계정은 삭제할 수 없습니다.");

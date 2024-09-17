@@ -3,8 +3,8 @@ package springproject.urssublog.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import springproject.urssublog.domain.User;
-import springproject.urssublog.exception.BlogResourceNotFoundException;
-import springproject.urssublog.exception.BlogUserNotFoundException;
+import springproject.urssublog.exception.classes.BlogResourceNotFoundException;
+import springproject.urssublog.exception.classes.BlogUserNotFoundException;
 import springproject.urssublog.repository.JpaUserRepository;
 
 import java.security.MessageDigest;
