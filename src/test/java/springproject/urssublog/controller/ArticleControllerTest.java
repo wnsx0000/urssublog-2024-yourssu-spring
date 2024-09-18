@@ -74,7 +74,8 @@ public class ArticleControllerTest {
      * /posts POST 게시물 등록 테스트 : 게시글 등록 시 spring validation 검증(@NotBlank, @Size)에 위배된 경우. (400)
      * → MethodArgumentNotValidException
      */
-    @Test void saveArticleNotValidFailure() throws Exception {
+    @Test
+    public void saveArticleNotValidFailure() throws Exception {
         //given
         //회원가입
         User user = new User("wnsx0000@gmail.com", "pasword~~", "username~~");
@@ -108,7 +109,8 @@ public class ArticleControllerTest {
     /**
      * /posts/{articleId} PUT 게시물 수정 테스트 : 성공한 경우.
      */
-    @Test void updateArticleSuccess() throws Exception {
+    @Test
+    public void updateArticleSuccess() throws Exception {
         //given
         //회원가입
         User user = new User("wnsx0000@gmail.com", "pasword~~", "username~~");
@@ -142,7 +144,8 @@ public class ArticleControllerTest {
      * /posts/{articleId} PUT 게시물 수정 테스트 : 게시글 수정 시 spring validation 검증(@NotBlank, @Size)에 위배된 경우. (400)
      * → MethodArgumentNotValidException
      */
-    @Test void updateArticleNotValidFailure() throws Exception {
+    @Test
+    public void updateArticleNotValidFailure() throws Exception {
         //given
         //회원가입
         User user = new User("wnsx0000@gmail.com", "pasword~~", "username~~");
@@ -178,10 +181,11 @@ public class ArticleControllerTest {
     }
 
     /**
-     * /posts/{articleId} DELETE 게시물 수정 테스트 : 게시글 수정 시 해당 리소스가 로그인 중인 회원의 리소스가 아닌 경우. (400)
+     * /posts/{articleId} DELETE 게시물 수정 테스트 : 게시물 수정 시 해당 id의 게시글이 존재하지 않는 경우.
      * → BlogNotAuthorizedException
      */
-    @Test void updateArticleNoAuthorFailure() throws Exception {
+    @Test
+    public void updateArticleNotFoundFailure() throws Exception {
         //given
         //회원가입
         User user = new User("wnsx0000@gmail.com", "pasword~~", "username~~");
@@ -194,12 +198,41 @@ public class ArticleControllerTest {
         session.setAttribute("username", user.getUsername());
 
         //게시물 등록
+        ArticleRequestDto requestDto = new ArticleRequestDto("new content", "new title");
+        mockMvc.perform(put("/posts/" + 10L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto))
+                        .session(session))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("400 BAD_REQUEST"));
+    }
+
+    /**
+     * /posts/{articleId} DELETE 게시물 수정 테스트 : 게시글 수정 시 해당 리소스가 로그인 중인 회원의 리소스가 아닌 경우.
+     * → BlogNotAuthorizedException
+     */
+    @Test
+    public void updateArticleNoAuthorFailure() throws Exception {
+        //given
+        //회원가입
+        User user = new User("wnsx0000@gmail.com", "pasword~~", "username~~");
+        userService.saveUser(user);
+        User anotherUser = new User("anothoer@gmail.com", "dfdfdf", "anothoer");
+        userService.saveUser(anotherUser);
+
+        //세션 생성(로그인)
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("id", user.getId());
+        session.setAttribute("email", user.getEmail());
+        session.setAttribute("username", user.getUsername());
+
+        //게시물 등록
         Article article = new Article("content~~", "title~~");
-        articleService.saveArticle(article, user.getId());
+        articleService.saveArticle(article, anotherUser.getId());
 
         ArticleRequestDto requestDto = new ArticleRequestDto("new content", "new title");
 
-        mockMvc.perform(put("/posts/" + (article.getId() + 1))
+        mockMvc.perform(put("/posts/" + article.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto))
                         .session(session))
@@ -210,7 +243,8 @@ public class ArticleControllerTest {
     /**
      * /posts/{articleId} DELETE 게시물 삭제 테스트 : 성공한 경우. (204 No Content)
      */
-    @Test void deleteArticleSuccess() throws Exception {
+    @Test
+    public void deleteArticleSuccess() throws Exception {
         //given
         //회원가입
         User user = new User("wnsx0000@gmail.com", "pasword~~", "username~~");
@@ -233,10 +267,36 @@ public class ArticleControllerTest {
     }
 
     /**
-     * /posts/{articleId} DELETE 게시물 삭제 테스트 : 게시글 삭제 시 해당 리소스가 로그인 중인 회원의 리소스가 아닌 경우. (400)
+     * /posts/{articleId} DELETE 게시물 삭제 테스트 : 게시글 삭제 시 해당 id의 게시물이 존재하지 않는 경우.
      * → BlogNotAuthorizedException
      */
-    @Test void deleteArticleNoAuthorFailure() throws Exception {
+    @Test
+    public void deleteArticleNotFoundFailure() throws Exception {
+        //given
+        //회원가입
+        User user = new User("wnsx0000@gmail.com", "pasword~~", "username~~");
+        userService.saveUser(user);
+
+        //세션 생성(로그인)
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("id", user.getId());
+        session.setAttribute("email", user.getEmail());
+        session.setAttribute("username", user.getUsername());
+
+        //게시물 등록
+        mockMvc.perform(delete("/posts/" + 10L)
+                        .session(session))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("400 BAD_REQUEST"));
+    }
+
+    /**
+     * /posts/{articleId} DELETE 게시물 삭제 테스트 : 게시글 삭제 시 해당 리소스가 로그인 중인 회원의 리소스가 아닌 경우.
+     * (해당 id의 게시글이 존재하지 않는 경우도 처리됨.)
+     * → BlogNotAuthorizedException
+     */
+    @Test
+    public void deleteArticleNoAuthorFailure() throws Exception {
         //given
         //회원가입
         User user = new User("wnsx0000@gmail.com", "pasword~~", "username~~");
