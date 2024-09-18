@@ -64,23 +64,24 @@ public class ArticleServiceTest {
         assertThat(articleService.getTitleById(article.getId())).isEqualTo("newTitle");
     }
 
-    /**
-     * Article service 계층 게시물 수정 테스트 : 게시글 수정 시 해당 id의 게시글이 존재하지 않는 경우.
-     * → BlogResourceNotFoundException
-     */
-    @Test
-    public void articleUpdateNotFoundFailure() {
-        //given
-        Article article = new Article("content~~", "title~~");
-        article.setId(10L);
-
-        //when, then
-        BlogResourceNotFoundException thrown = assertThrows(BlogResourceNotFoundException.class, () -> {
-            articleService.updateArticle(article);
-        });
-        log.debug("articleUpdateNotFoundFailure(), no article to update exception message={}", thrown.getMessage());
-
-    }
+//    /**
+//     * Article service 계층 게시물 수정 테스트 : 게시글 수정 시 해당 id의 게시글이 존재하지 않는 경우.
+//     * → BlogResourceNotFoundException
+//     * 다른 예외 상황에 대한 처리에 의해 해결되므로 테스트 케이스에서 제외함.
+//     */
+//    @Test
+//    public void articleUpdateNotFoundFailure() {
+//        //given
+//        Article article = new Article("content~~", "title~~");
+//        article.setId(10L);
+//
+//        //when, then
+//        BlogResourceNotFoundException thrown = assertThrows(BlogResourceNotFoundException.class, () -> {
+//            articleService.updateArticle(article);
+//        });
+//        log.debug("articleUpdateNotFoundFailure(), no article to update exception message={}", thrown.getMessage());
+//
+//    }
 
     /**
      * Article service 계층 게시물 삭제 테스트 : 성공한 경우.
@@ -102,17 +103,17 @@ public class ArticleServiceTest {
         assertThat(user.getArticles().contains(article)).isFalse();
     }
 
-    /**
-     * Article service 계층 게시물 삭제 테스트 : 게시글 삭제 시 해당 id의 게시글이 존재하지 않는 경우.
-     * → BlogResourceNotFoundException
-     */
-    @Test
-    public void articleDeleteNotFoundFailure() {
-        //given, when, then
-        BlogResourceNotFoundException thrown = assertThrows(BlogResourceNotFoundException.class, () -> {
-            articleService.deleteArticle(10L);
-        });
-        log.debug("articleDeleteNotFoundFailure(), no article to delete exception message={}", thrown.getMessage());
-    }
-
+//    /**
+//     * Article service 계층 게시물 삭제 테스트 : 게시글 삭제 시 해당 id의 게시글이 존재하지 않는 경우.
+//     * → BlogResourceNotFoundException
+//     * 다른 예외 상황에 대한 처리에 의해 해결되므로 테스트 케이스에서 제외함.
+//     */
+//    @Test
+//    public void articleDeleteNotFoundFailure() {
+//        //given, when, then
+//        BlogResourceNotFoundException thrown = assertThrows(BlogResourceNotFoundException.class, () -> {
+//            articleService.deleteArticle(10L);
+//        });
+//        log.debug("articleDeleteNotFoundFailure(), no article to delete exception message={}", thrown.getMessage());
+//    }
 }

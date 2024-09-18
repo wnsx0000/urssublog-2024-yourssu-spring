@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import springproject.urssublog.domain.User;
+import springproject.urssublog.dto.comment.CommentResponseDto;
 import springproject.urssublog.dto.user.UserLoginRequestDto;
 import springproject.urssublog.dto.user.UserResponseDto;
 import springproject.urssublog.dto.user.UserSignupRequestDto;
@@ -31,7 +32,10 @@ public class UserController {
     ) {
         User user = new User(requestDto.getEmail(), requestDto.getPassword(), requestDto.getUsername());
         userService.saveUser(user);
-        return (new UserResponseDto(requestDto.getEmail(), requestDto.getUsername()));
+
+        UserResponseDto responseDto = new UserResponseDto(requestDto.getEmail(), requestDto.getUsername());
+        log.debug("UserResponseDto, POST method to /users\n{}", responseDto.toString());
+        return responseDto;
     }
 
     /**
@@ -52,7 +56,9 @@ public class UserController {
         session.setAttribute("email", user.getEmail());
         session.setAttribute("username", user.getUsername());
 
-        return (new UserResponseDto(user.getEmail(), user.getUsername()));
+        UserResponseDto responseDto = new UserResponseDto(user.getEmail(), user.getUsername());
+        log.debug("UserResponseDto, POST method to /users/login\n{}", responseDto.toString());
+        return responseDto;
     }
 
     /**

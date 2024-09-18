@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springproject.urssublog.domain.User;
+import springproject.urssublog.exception.classes.BlogNotAuthorizedException;
 import springproject.urssublog.exception.classes.BlogResourceNotFoundException;
 import springproject.urssublog.exception.classes.BlogUserNotFoundException;
 import springproject.urssublog.repository.JpaUserRepository;
@@ -74,5 +75,31 @@ public class UserService {
     public String getUsernameById(Long id) {
         User user = userRepository.findById(id).orElse(null);
         return (user != null ? user.getUsername() : null);
+    }
+
+    // 해당 id의 게시물이 지정한 id 사용자의 소유인지 판별
+    public void checkIsArticleFromUser(Long articleId, Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isEmpty()) {
+            throw new BlogUserNotFoundException("해당 id의 회원이 존재하지 않습니다.");
+        }
+        if(optionalUser.get().getArticles().stream().noneMatch(
+                article -> article.getId().equals(articleId))
+        ) {
+            throw new BlogNotAuthorizedException("로그인 중인 사용자의 게시글이 아닙니다.");
+        }
+    }
+
+    // 해당 id의 댓글이 지정한 id 사용자의 소유인지 판별
+    public void checkIsCommentFromUser(Long commentId, Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isEmpty()) {
+            throw new BlogUserNotFoundException("해당 id의 회원이 존재하지 않습니다.");
+        }
+        if(optionalUser.get().getComments().stream().noneMatch(
+                comment -> comment.getId().equals(commentId)
+        )) {
+            throw new BlogNotAuthorizedException("로그인 중인 사용자의 댓글이 아닙니다.");
+        }
     }
 }

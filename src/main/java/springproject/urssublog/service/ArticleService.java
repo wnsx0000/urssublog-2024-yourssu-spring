@@ -44,29 +44,27 @@ public class ArticleService {
      * @author Jun Lee
      */
     @Transactional
-    public Long updateArticle(Article newArticle) {
+    public void updateArticle(Article newArticle) {
         Optional<Article> optionalArticle = articleRepository.findById(newArticle.getId());
         if(optionalArticle.isEmpty()) {
-            throw new BlogResourceNotFoundException("해당 id의 게시물이 존재하지 않습니다.");
+            throw new BlogResourceNotFoundException("해당 id의 게시글이 존재하지 않습니다.");
         }
 
         Article article = optionalArticle.get();
         article.setUpdatedTime(LocalDateTime.now());
         article.setTitle(newArticle.getTitle());
         article.setContent(newArticle.getContent());
-        return article.getId();
     }
 
     /**
      * 게시글 id를 파라미터로 받아 해당 게시글을 삭제한다.
-     * 추가로, 수정 시간을 지정한다.
      * @author Jun Lee
      */
     @Transactional
     public void deleteArticle(Long articleId) {
         Optional<Article> optionalArticle = articleRepository.findById(articleId);
         if(optionalArticle.isEmpty()) {
-            throw new BlogResourceNotFoundException("해당 id의 게시물이 존재하지 않습니다.");
+            throw new BlogResourceNotFoundException("해당 id의 게시글이 존재하지 않습니다.");
         }
 
         Article article = optionalArticle.get();

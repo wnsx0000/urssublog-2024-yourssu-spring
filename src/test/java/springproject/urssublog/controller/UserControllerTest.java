@@ -36,7 +36,7 @@ public class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private UserService userService; // 테스트 데이터 설정용 (회원가입 로직 사용)
+    private UserService userService; // 테스트 데이터 설정용
 
     /**
      * /users POST 회원가입 테스트 : 성공한 경우.
