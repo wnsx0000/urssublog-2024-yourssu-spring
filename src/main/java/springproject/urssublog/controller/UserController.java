@@ -91,5 +91,6 @@ public class UserController {
             throw new BlogNotAuthorizedException("다른 사용자의 계정은 삭제할 수 없습니다.");
         }
         userService.deleteUser(Long.parseLong(userId));
+        session.invalidate(); //로그인 정보 삭제
     }
 }

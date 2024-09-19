@@ -6,8 +6,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import springproject.urssublog.exception.handling.ExceptionResponseClass;
+import springproject.urssublog.dto.exception.ExceptionResponseDto;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -24,8 +23,8 @@ public class LoginCheckFilter implements Filter {
 
         //로그인 중인지 검사
         if((!isAccessibleUri(requestUri)) && (request.getSession(false) == null)) {
-            ExceptionResponseClass responseDto = new ExceptionResponseClass(
-                    LocalDateTime.now(),
+            ExceptionResponseDto responseDto = new ExceptionResponseDto(
+                    LocalDateTime.now().toString(),
                     "400 BAD_REQUEST",
                     "로그인 중이 아닙니다.",
                     requestUri

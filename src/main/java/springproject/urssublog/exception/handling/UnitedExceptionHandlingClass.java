@@ -4,25 +4,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
+import springproject.urssublog.dto.exception.ExceptionResponseDto;
 import springproject.urssublog.exception.classes.BlogNotAuthorizedException;
 import springproject.urssublog.exception.classes.BlogResourceNotFoundException;
 import springproject.urssublog.exception.classes.BlogUserNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
+
 public class UnitedExceptionHandlingClass {
     /**
      * 회원가입 정보(email, username)가 겹치는 경우에 발생하는 DataIntegrityViolationException 처리.
@@ -30,12 +25,12 @@ public class UnitedExceptionHandlingClass {
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponseClass handleDataIntegrityViolationException(
+    public ExceptionResponseDto handleDataIntegrityViolationException(
             DataIntegrityViolationException e,
             HttpServletRequest request
     ) {
-        ExceptionResponseClass responseClass = new ExceptionResponseClass();
-        responseClass.setTime(LocalDateTime.now());
+        ExceptionResponseDto responseClass = new ExceptionResponseDto();
+        responseClass.setTime(LocalDateTime.now().toString());
         responseClass.setStatus(HttpStatus.BAD_REQUEST.toString());
         responseClass.setMessage("데이터베이스 무결성 위반. 중복된 email 또는 username을 사용했을 수 있습니다.");
         responseClass.setRequestURI(request.getRequestURI());
@@ -51,7 +46,7 @@ public class UnitedExceptionHandlingClass {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponseClass handleMethodArgumentNotValidException(
+    public ExceptionResponseDto handleMethodArgumentNotValidException(
             MethodArgumentNotValidException e,
             HttpServletRequest request
     ) {
@@ -60,8 +55,8 @@ public class UnitedExceptionHandlingClass {
             rst.append(error.getDefaultMessage());
         });
 
-        ExceptionResponseClass responseClass = new ExceptionResponseClass();
-        responseClass.setTime(LocalDateTime.now());
+        ExceptionResponseDto responseClass = new ExceptionResponseDto();
+        responseClass.setTime(LocalDateTime.now().toString());
         responseClass.setStatus(HttpStatus.BAD_REQUEST.toString());
         responseClass.setMessage(rst.toString());
         responseClass.setRequestURI(request.getRequestURI());
@@ -77,12 +72,12 @@ public class UnitedExceptionHandlingClass {
      */
     @ExceptionHandler(BlogUserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionResponseClass handleBlogUserNotFoundException(
+    public ExceptionResponseDto handleBlogUserNotFoundException(
             BlogUserNotFoundException e,
             HttpServletRequest request
     ) {
-        ExceptionResponseClass responseClass = new ExceptionResponseClass();
-        responseClass.setTime(LocalDateTime.now());
+        ExceptionResponseDto responseClass = new ExceptionResponseDto();
+        responseClass.setTime(LocalDateTime.now().toString());
         responseClass.setStatus(HttpStatus.NOT_FOUND.toString());
         responseClass.setMessage(e.getMessage());
         responseClass.setRequestURI(request.getRequestURI());
@@ -99,12 +94,12 @@ public class UnitedExceptionHandlingClass {
      */
     @ExceptionHandler(BlogResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionResponseClass handleBlogResourceNotFoundException(
+    public ExceptionResponseDto handleBlogResourceNotFoundException(
             BlogResourceNotFoundException e,
             HttpServletRequest request
     ) {
-        ExceptionResponseClass responseClass = new ExceptionResponseClass();
-        responseClass.setTime(LocalDateTime.now());
+        ExceptionResponseDto responseClass = new ExceptionResponseDto();
+        responseClass.setTime(LocalDateTime.now().toString());
         responseClass.setStatus(HttpStatus.NOT_FOUND.toString());
         responseClass.setMessage(e.getMessage());
         responseClass.setRequestURI(request.getRequestURI());
@@ -120,12 +115,12 @@ public class UnitedExceptionHandlingClass {
      */
     @ExceptionHandler(BlogNotAuthorizedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponseClass handleBlogNotAuthorizedException(
+    public ExceptionResponseDto handleBlogNotAuthorizedException(
             BlogNotAuthorizedException e,
             HttpServletRequest request
     ) {
-        ExceptionResponseClass responseClass = new ExceptionResponseClass();
-        responseClass.setTime(LocalDateTime.now());
+        ExceptionResponseDto responseClass = new ExceptionResponseDto();
+        responseClass.setTime(LocalDateTime.now().toString());
         responseClass.setStatus(HttpStatus.BAD_REQUEST.toString());
         responseClass.setMessage(e.getMessage());
         responseClass.setRequestURI(request.getRequestURI());
