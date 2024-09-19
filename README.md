@@ -43,7 +43,7 @@ API 설계는 아래와 같습니다.
 
 # 패키지 구성
 
-프로젝트의 핵심 코드는 src.main.java.springproject.urssublog에 있고, 해당 위치에서의 패키지 구성은 아래와 같습니다.
+핵심 코드는 src.main.java.springproject.urssublog에 있고, 해당 경로부터의 패키지 구성은 아래와 같습니다.
 
 > controller : 각 도메인 별 controller 클래스가 있습니다.
 > 
