@@ -2,23 +2,17 @@
 
 # About
 
----
-
 본 프로젝트는 유어슈 백엔드 지원 과제로서 수행한 간단한 블로그 만들기 프로젝트입니다.
 
 Spring core, Spring boot, Spring mvc, JPA, Mysql, Slf4j, Junit 등을 사용하여 개발했습니다.
 
 # ERD
 
----
-
 ERD는 아래와 같습니다.
 
 ![urssublog.png](urssublog.png)
 
 # API 설계
-
----
 
 API 설계는 아래와 같습니다.
 
@@ -48,8 +42,6 @@ API 설계는 아래와 같습니다.
 > PUT : 댓글 수정 DELETE : 댓글 삭제
 
 # 패키지 구성
-
----
 
 프로젝트의 핵심 코드는 src.main.java.springproject.urssublog에 있고, 해당 위치에서의 패키지 구성은 아래와 같습니다.
 
